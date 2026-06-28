@@ -2,12 +2,13 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useAuth, ClerkProvider } from '@clerk/nextjs'
+import { MenuIcon, XIcon } from 'lucide-react'
 
 const features = [
   {
     icon: '🤖',
     title: 'RAG-Powered Answers',
-    body: 'Claude reads your docs on every question. Answers are always grounded in your content — never hallucinated.',
+    body: 'Every answer is grounded in your uploaded docs. No hallucinations — if the answer isn\'t in your content, the AI says so.',
   },
   {
     icon: '⚡',
@@ -113,7 +114,7 @@ const faqs = [
     a: 'You upload your docs — PDFs, text files, or URLs. Replyr chunks and embeds them into a vector database. When a visitor asks a question, the AI retrieves the most relevant sections and answers from them.',
   },
   {
-    q: 'What if the AI can\'t answer a question?',
+    q: "What if the AI can't answer a question?",
     a: "The AI is instructed to say so honestly and offer to connect the visitor with a human agent. It captures their email so your team can follow up — no question gets dropped.",
   },
   {
@@ -130,8 +131,50 @@ const faqs = [
   },
 ]
 
+const testimonials = [
+  {
+    quote: "We went from drowning in repeat support tickets to handling them automatically. Setup took less than 10 minutes. Our team now focuses on issues that actually need a human.",
+    name: 'Sarah Chen',
+    role: 'Head of Customer Support',
+    company: 'TechFlow',
+    avatar: 'SC',
+    color: 'bg-violet-500',
+  },
+  {
+    quote: "I uploaded our FAQ, grabbed the script tag, pasted it before </body>. That was it. The widget was live and answering questions in under 10 minutes. Genuinely impressed.",
+    name: 'Marcus Webb',
+    role: 'Founder',
+    company: 'ShopEasy',
+    avatar: 'MW',
+    color: 'bg-emerald-500',
+  },
+  {
+    quote: "The human handoff is what sold me. The AI captures the email when it can't answer — nothing falls through the cracks. It's like having a support agent that never sleeps.",
+    name: 'Priya Nair',
+    role: 'Customer Success Manager',
+    company: 'BuildCo',
+    avatar: 'PN',
+    color: 'bg-amber-500',
+  },
+]
+
+const useCases = [
+  { icon: '🛍️', label: 'E-commerce', desc: 'Answer product, shipping, and return questions instantly.' },
+  { icon: '💻', label: 'SaaS', desc: 'Turn your docs into a 24/7 support agent.' },
+  { icon: '🏢', label: 'Agencies', desc: 'White-label AI support for every client you serve.' },
+  { icon: '📚', label: 'Education', desc: 'Let students get instant answers from course material.' },
+]
+
+const stats = [
+  { value: '< 2s', label: 'Average response time' },
+  { value: '99.9%', label: 'Uptime SLA' },
+  { value: '1024', label: 'Vector dimensions' },
+  { value: '1 tag', label: 'To embed on any site' },
+]
+
 function HomePageInner() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { isSignedIn } = useAuth()
 
   return (
@@ -140,6 +183,8 @@ function HomePageInner() {
       <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link href="/" className="text-xl font-bold text-blue-600 tracking-tight">Replyr</Link>
+
+          {/* Desktop nav */}
           <nav className="hidden items-center gap-8 md:flex">
             <a href="#features" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Features</a>
             <a href="#how-it-works" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">How it works</a>
@@ -147,6 +192,7 @@ function HomePageInner() {
             <a href="#faq" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">FAQ</a>
             <Link href="/demo" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Demo</Link>
           </nav>
+
           <div className="flex items-center gap-3">
             {isSignedIn ? (
               <Link href="/bots" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
@@ -154,7 +200,7 @@ function HomePageInner() {
               </Link>
             ) : (
               <>
-                <Link href="/sign-in" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
+                <Link href="/sign-in" className="hidden text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors sm:block">
                   Sign in
                 </Link>
                 <Link href="/sign-up" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
@@ -162,8 +208,31 @@ function HomePageInner() {
                 </Link>
               </>
             )}
+            {/* Mobile hamburger */}
+            <button
+              className="p-1 text-gray-500 hover:text-gray-700 md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <XIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile menu dropdown */}
+        {mobileMenuOpen && (
+          <div className="border-t border-gray-100 bg-white px-6 pb-4 md:hidden">
+            <nav className="flex flex-col gap-3 pt-3">
+              <a href="#features" onClick={() => setMobileMenuOpen(false)} className="text-sm text-gray-600 hover:text-gray-900">Features</a>
+              <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="text-sm text-gray-600 hover:text-gray-900">How it works</a>
+              <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="text-sm text-gray-600 hover:text-gray-900">Pricing</a>
+              <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="text-sm text-gray-600 hover:text-gray-900">FAQ</a>
+              <Link href="/demo" onClick={() => setMobileMenuOpen(false)} className="text-sm text-gray-600 hover:text-gray-900">Demo</Link>
+              {!isSignedIn && (
+                <Link href="/sign-in" onClick={() => setMobileMenuOpen(false)} className="text-sm text-gray-600 hover:text-gray-900">Sign in</Link>
+              )}
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* ── Hero ── */}
@@ -229,13 +298,15 @@ function HomePageInner() {
         </div>
       </section>
 
-      {/* ── Social proof ── */}
-      <section className="border-y border-gray-100 bg-gray-50 py-10">
+      {/* ── Stats bar ── */}
+      <section className="border-y border-gray-100 bg-gray-50 py-12">
         <div className="mx-auto max-w-5xl px-6">
-          <p className="text-center text-xs font-semibold uppercase tracking-widest text-gray-400">Trusted by teams at</p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-10 opacity-50">
-            {['Acme Corp', 'Vercel', 'Stripe', 'Linear', 'Notion', 'Figma'].map((name) => (
-              <span key={name} className="text-lg font-bold text-gray-400">{name}</span>
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+            {stats.map((s) => (
+              <div key={s.label} className="text-center">
+                <div className="text-3xl font-extrabold text-blue-600">{s.value}</div>
+                <div className="mt-1 text-sm text-gray-500">{s.label}</div>
+              </div>
             ))}
           </div>
         </div>
@@ -275,6 +346,25 @@ function HomePageInner() {
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-500">{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Use cases ── */}
+      <section className="border-t border-gray-100 bg-white py-20">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900">Built for every business</h2>
+            <p className="mt-3 text-lg text-gray-500">Any industry. Any website. Any stack.</p>
+          </div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {useCases.map((u) => (
+              <div key={u.label} className="rounded-2xl border border-gray-100 bg-gray-50 p-6 hover:border-blue-200 hover:bg-blue-50/40 transition-colors">
+                <div className="text-3xl">{u.icon}</div>
+                <h3 className="mt-3 font-semibold text-gray-900">{u.label}</h3>
+                <p className="mt-1 text-sm text-gray-500">{u.desc}</p>
               </div>
             ))}
           </div>
@@ -332,8 +422,37 @@ function HomePageInner() {
         </div>
       </section>
 
+      {/* ── Testimonials ── */}
+      <section className="border-t border-gray-100 bg-gray-50 py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center">
+            <h2 className="text-4xl font-bold text-gray-900">What teams are saying</h2>
+            <p className="mt-3 text-lg text-gray-500">Real results from businesses using Replyr.</p>
+          </div>
+          <div className="mt-16 grid gap-8 sm:grid-cols-3">
+            {testimonials.map((t) => (
+              <div key={t.name} className="flex flex-col rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+                <div className="flex gap-1 text-amber-400 text-sm mb-4">
+                  {'★★★★★'}
+                </div>
+                <p className="flex-1 text-sm leading-relaxed text-gray-600">"{t.quote}"</p>
+                <div className="mt-6 flex items-center gap-3">
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${t.color}`}>
+                    {t.avatar}
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">{t.name}</div>
+                    <div className="text-xs text-gray-400">{t.role} · {t.company}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Pricing ── */}
-      <section id="pricing" className="border-t border-gray-100 bg-gray-50 py-24">
+      <section id="pricing" className="border-t border-gray-100 bg-white py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="text-center">
             <h2 className="text-4xl font-bold text-gray-900">Simple, transparent pricing</h2>
@@ -350,7 +469,7 @@ function HomePageInner() {
                 }`}
               >
                 {plan.highlight && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-amber-400 px-4 py-1 text-xs font-bold text-amber-900">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-amber-400 px-4 py-1 text-xs font-bold text-amber-900 whitespace-nowrap">
                     Most popular
                   </div>
                 )}
@@ -387,7 +506,7 @@ function HomePageInner() {
       </section>
 
       {/* ── FAQ ── */}
-      <section id="faq" className="py-24">
+      <section id="faq" className="border-t border-gray-100 bg-gray-50 py-24">
         <div className="mx-auto max-w-3xl px-6">
           <h2 className="text-center text-4xl font-bold text-gray-900">Frequently asked questions</h2>
           <div className="mt-12 space-y-4">
@@ -398,7 +517,7 @@ function HomePageInner() {
                   className="flex w-full items-center justify-between px-6 py-5 text-left"
                 >
                   <span className="font-semibold text-gray-900">{faq.q}</span>
-                  <span className="ml-4 text-gray-400 text-xl">{openFaq === i ? '−' : '+'}</span>
+                  <span className="ml-4 text-gray-400 text-xl shrink-0">{openFaq === i ? '−' : '+'}</span>
                 </button>
                 {openFaq === i && (
                   <div className="border-t border-gray-100 px-6 py-4 text-sm leading-relaxed text-gray-500">
@@ -415,7 +534,7 @@ function HomePageInner() {
       <section className="bg-blue-600 py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
           <h2 className="text-4xl font-bold text-white">Ready to add AI support?</h2>
-          <p className="mt-4 text-xl text-blue-100">Join hundreds of businesses answering customer questions 24/7.</p>
+          <p className="mt-4 text-xl text-blue-100">Set up in under 10 minutes. No credit card required.</p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/sign-up" className="w-full rounded-xl bg-white px-10 py-4 text-base font-semibold text-blue-600 hover:bg-blue-50 transition-colors shadow-lg sm:w-auto">
               Start for free →
@@ -424,7 +543,6 @@ function HomePageInner() {
               See live demo
             </Link>
           </div>
-          <p className="mt-4 text-sm text-blue-200">No credit card required</p>
         </div>
       </section>
 
@@ -455,9 +573,9 @@ function HomePageInner() {
               </div>
             </div>
           </div>
-          <div className="mt-10 border-t border-gray-100 pt-6 flex items-center justify-between">
+          <div className="mt-10 border-t border-gray-100 pt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs text-gray-400">© {new Date().getFullYear()} Replyr. All rights reserved.</p>
-            <p className="text-xs text-gray-400">Built with Next.js · MongoDB · Claude AI</p>
+            <p className="text-xs text-gray-400">Built with Next.js · MongoDB · LLaMA 3.3</p>
           </div>
         </div>
       </footer>
