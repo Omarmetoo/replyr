@@ -7,7 +7,7 @@ export default defineConfig({
     lib: {
       entry: 'src/index.tsx',
       name: 'ReplyrWidget',
-      fileName: () => 'widget',
+      fileName: () => 'widget.js',
       formats: ['iife'],
     },
     outDir: '../public',
