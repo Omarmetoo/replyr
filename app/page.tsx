@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useState } from 'react'
+import { useAuth, ClerkProvider } from '@clerk/nextjs'
 
 const features = [
   {
@@ -82,8 +83,8 @@ const plans = [
       'Analytics dashboard',
       'Remove "Powered by Replyr"',
     ],
-    cta: 'Start free trial',
-    href: '/sign-up',
+    cta: 'Contact us to upgrade',
+    href: 'mailto:omarmetoo2@gmail.com?subject=Replyr Pro Plan',
     highlight: true,
   },
   {
@@ -101,7 +102,7 @@ const plans = [
       'On-premise option',
     ],
     cta: 'Contact sales',
-    href: 'mailto:hello@replyr.ai',
+    href: 'mailto:omarmetoo2@gmail.com?subject=Replyr Enterprise',
     highlight: false,
   },
 ]
@@ -129,8 +130,9 @@ const faqs = [
   },
 ]
 
-export default function HomePage() {
+function HomePageInner() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const { isSignedIn } = useAuth()
 
   return (
     <div className="min-h-screen bg-white font-sans">
@@ -146,12 +148,20 @@ export default function HomePage() {
             <Link href="/demo" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Demo</Link>
           </nav>
           <div className="flex items-center gap-3">
-            <Link href="/sign-in" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
-              Sign in
-            </Link>
-            <Link href="/sign-up" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
-              Get started free
-            </Link>
+            {isSignedIn ? (
+              <Link href="/bots" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
+                Go to dashboard →
+              </Link>
+            ) : (
+              <>
+                <Link href="/sign-in" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
+                  Sign in
+                </Link>
+                <Link href="/sign-up" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
+                  Get started free
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -170,8 +180,8 @@ export default function HomePage() {
             Upload your docs. Paste one script tag. Your visitors get instant, accurate answers 24/7 — grounded in your content, not hallucinations.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href="/sign-up" className="w-full rounded-xl bg-blue-600 px-8 py-4 text-base font-semibold text-white shadow-lg hover:bg-blue-700 transition-colors sm:w-auto">
-              Start for free →
+            <Link href={isSignedIn ? '/bots' : '/sign-up'} className="w-full rounded-xl bg-blue-600 px-8 py-4 text-base font-semibold text-white shadow-lg hover:bg-blue-700 transition-colors sm:w-auto">
+              {isSignedIn ? 'Go to dashboard →' : 'Start for free →'}
             </Link>
             <Link href="/demo" className="w-full rounded-xl border border-gray-200 bg-white px-8 py-4 text-base font-semibold text-gray-700 hover:bg-gray-50 transition-colors sm:w-auto">
               See live demo
@@ -452,5 +462,13 @@ export default function HomePage() {
         </div>
       </footer>
     </div>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <ClerkProvider>
+      <HomePageInner />
+    </ClerkProvider>
   )
 }
