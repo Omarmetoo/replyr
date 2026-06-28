@@ -23,6 +23,7 @@ async function extractTextFromUrl(url: string): Promise<string> {
 }
 
 export async function POST(req: NextRequest) {
+  try {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
@@ -71,6 +72,10 @@ export async function POST(req: NextRequest) {
   })
 
   return NextResponse.json({ documentId, status: 'processing' }, { status: 202 })
+  } catch (err) {
+    console.error('POST /api/ingest error:', err)
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+  }
 }
 
 async function processDocument(
@@ -99,16 +104,21 @@ async function processDocument(
 
 // Get documents for a bot
 export async function GET(req: NextRequest) {
-  const { userId } = await auth()
-  if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  try {
+    const { userId } = await auth()
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const workspaceId = req.nextUrl.searchParams.get('workspaceId')
-  if (!workspaceId) return NextResponse.json({ error: 'workspaceId required' }, { status: 400 })
+    const workspaceId = req.nextUrl.searchParams.get('workspaceId')
+    if (!workspaceId) return NextResponse.json({ error: 'workspaceId required' }, { status: 400 })
 
-  const workspace = await findWorkspaceById(workspaceId, userId)
-  if (!workspace) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    const workspace = await findWorkspaceById(workspaceId, userId)
+    if (!workspace) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  const { findDocumentsByWorkspace } = await import('@/models/documents')
-  const docs = await findDocumentsByWorkspace(workspaceId)
-  return NextResponse.json(docs)
+    const { findDocumentsByWorkspace } = await import('@/models/documents')
+    const docs = await findDocumentsByWorkspace(workspaceId)
+    return NextResponse.json(docs)
+  } catch (err) {
+    console.error('GET /api/ingest error:', err)
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+  }
 }

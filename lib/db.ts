@@ -2,23 +2,35 @@ import { MongoClient, Db } from 'mongodb'
 
 const dbName = 'replyr'
 
+declare global {
+  // eslint-disable-next-line no-var
+  var _mongoClientPromise: Promise<MongoClient> | undefined
+}
+
 let clientPromise: Promise<MongoClient> | null = null
+
+function createClientPromise(): Promise<MongoClient> {
+  const uri = process.env.MONGODB_URI
+  if (!uri) throw new Error('MONGODB_URI environment variable is not set')
+  const p = new MongoClient(uri, {
+    serverSelectionTimeoutMS: 10000, // fail fast after 10s instead of hanging forever
+    connectTimeoutMS: 10000,
+  }).connect()
+  // If connection fails, clear cache so next call retries
+  p.catch(() => { clientPromise = null })
+  return p
+}
 
 function getClientPromise(): Promise<MongoClient> {
   if (clientPromise) return clientPromise
 
-  const uri = process.env.MONGODB_URI
-  if (!uri) throw new Error('MONGODB_URI environment variable is not set')
-
   if (process.env.NODE_ENV === 'development') {
-    // Use a global cache in dev to survive HMR
-    const g = global as typeof global & { _mongoClientPromise?: Promise<MongoClient> }
-    if (!g._mongoClientPromise) {
-      g._mongoClientPromise = new MongoClient(uri).connect()
+    if (!global._mongoClientPromise) {
+      global._mongoClientPromise = createClientPromise()
     }
-    clientPromise = g._mongoClientPromise
+    clientPromise = global._mongoClientPromise
   } else {
-    clientPromise = new MongoClient(uri).connect()
+    clientPromise = createClientPromise()
   }
   return clientPromise
 }
