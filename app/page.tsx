@@ -172,8 +172,8 @@ function HomePageInner() {
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-1.5 text-xs font-semibold text-blue-700 uppercase tracking-wide">
             AI Customer Support — Free to Start
           </div>
-          <h1 className="text-5xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-6xl lg:text-7xl">
-            AI support that knows<br />
+          <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-5xl lg:text-7xl">
+            AI support that knows{' '}
             <span className="text-blue-600">your product</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-xl leading-relaxed text-gray-500">
@@ -345,7 +345,7 @@ function HomePageInner() {
                 key={plan.name}
                 className={`relative flex flex-col rounded-2xl p-8 ${
                   plan.highlight
-                    ? 'bg-blue-600 text-white shadow-2xl scale-105'
+                    ? 'bg-blue-600 text-white shadow-2xl lg:scale-105'
                     : 'bg-white border border-gray-200 shadow-sm'
                 }`}
               >
@@ -436,7 +436,7 @@ function HomePageInner() {
               <Link href="/" className="text-xl font-bold text-blue-600">Replyr</Link>
               <p className="mt-2 max-w-xs text-sm text-gray-400">AI customer support that knows your product. Answers grounded in your docs, 24/7.</p>
             </div>
-            <div className="flex gap-16">
+            <div className="flex gap-8 sm:gap-16">
               <div>
                 <p className="text-sm font-semibold text-gray-700">Product</p>
                 <div className="mt-3 flex flex-col gap-2">
