@@ -1,26 +1,155 @@
+'use client'
 import Link from 'next/link'
+import { useState } from 'react'
+
+const features = [
+  {
+    icon: '🤖',
+    title: 'RAG-Powered Answers',
+    body: 'Claude reads your docs on every question. Answers are always grounded in your content — never hallucinated.',
+  },
+  {
+    icon: '⚡',
+    title: 'Real-Time Streaming',
+    body: 'Tokens stream to the visitor instantly, just like ChatGPT. No waiting for a full response to load.',
+  },
+  {
+    icon: '🧑‍💼',
+    title: 'Human Handoff',
+    body: "When AI can't help, it captures the visitor's email so your team can follow up personally.",
+  },
+  {
+    icon: '📁',
+    title: 'Multi-Source Ingestion',
+    body: 'Upload PDFs, paste plain text, or import live URLs. All chunked, embedded, and kept searchable.',
+  },
+  {
+    icon: '🎨',
+    title: 'Full Customization',
+    body: "Set your bot's name, greeting, color, and position. Preview changes live before saving.",
+  },
+  {
+    icon: '🔒',
+    title: 'Secure by Design',
+    body: 'AI keys never leave the server. The widget authenticates with a scoped public key safe to expose.',
+  },
+  {
+    icon: '📊',
+    title: 'Conversations Inbox',
+    body: 'View every chat in your dashboard. See what visitors asked, what the AI answered, and who needs follow-up.',
+  },
+  {
+    icon: '🌐',
+    title: 'Works on Any Stack',
+    body: 'One script tag. No npm installs, no build steps. Drop it on Webflow, Shopify, WordPress, or raw HTML.',
+  },
+  {
+    icon: '📈',
+    title: 'Vector Search',
+    body: 'Powered by MongoDB Atlas Vector Search — retrieves the most relevant chunks from your docs in milliseconds.',
+  },
+]
+
+const plans = [
+  {
+    name: 'Starter',
+    price: '$0',
+    period: 'forever',
+    description: 'Perfect for testing and small projects.',
+    features: [
+      '1 bot',
+      'Up to 50 docs',
+      '500 messages/month',
+      'Widget customization',
+      'Human handoff',
+      'Community support',
+    ],
+    cta: 'Get started free',
+    href: '/sign-up',
+    highlight: false,
+  },
+  {
+    name: 'Pro',
+    price: '$29',
+    period: 'per month',
+    description: 'For growing businesses that need more.',
+    features: [
+      '5 bots',
+      'Unlimited docs',
+      '10,000 messages/month',
+      'Custom branding',
+      'Priority support',
+      'Analytics dashboard',
+      'Remove "Powered by Replyr"',
+    ],
+    cta: 'Start free trial',
+    href: '/sign-up',
+    highlight: true,
+  },
+  {
+    name: 'Enterprise',
+    price: 'Custom',
+    period: 'contact us',
+    description: 'For large teams with advanced needs.',
+    features: [
+      'Unlimited bots',
+      'Unlimited messages',
+      'SSO & team accounts',
+      'SLA guarantee',
+      'Dedicated support',
+      'Custom integrations',
+      'On-premise option',
+    ],
+    cta: 'Contact sales',
+    href: 'mailto:hello@replyr.ai',
+    highlight: false,
+  },
+]
+
+const faqs = [
+  {
+    q: 'How does the AI know about my product?',
+    a: 'You upload your docs — PDFs, text files, or URLs. Replyr chunks and embeds them into a vector database. When a visitor asks a question, the AI retrieves the most relevant sections and answers from them.',
+  },
+  {
+    q: 'What if the AI can\'t answer a question?',
+    a: "The AI is instructed to say so honestly and offer to connect the visitor with a human agent. It captures their email so your team can follow up — no question gets dropped.",
+  },
+  {
+    q: 'Will it work on my website?',
+    a: 'Yes. One script tag before </body> is all it takes. Works on any platform: Webflow, Shopify, WordPress, React, or plain HTML.',
+  },
+  {
+    q: 'Is my data secure?',
+    a: 'Your API keys never leave our servers. The widget only uses a scoped public key. All AI inference happens server-side.',
+  },
+  {
+    q: 'Can I customize how it looks?',
+    a: "Yes — bot name, greeting message, brand color, and position (bottom-left or bottom-right). You can preview changes live in the dashboard before saving.",
+  },
+]
 
 export default function HomePage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
+
   return (
     <div className="min-h-screen bg-white font-sans">
       {/* ── Navbar ── */}
-      <header className="sticky top-0 z-10 border-b border-gray-100 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-          <span className="text-xl font-bold text-blue-600 tracking-tight">Replyr</span>
-          <div className="flex items-center gap-4">
-            <Link href="/demo" className="hidden text-sm text-gray-500 hover:text-gray-900 transition-colors sm:block">
-              Live demo
-            </Link>
-            <Link
-              href="/sign-in"
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-            >
+      <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+          <Link href="/" className="text-xl font-bold text-blue-600 tracking-tight">Replyr</Link>
+          <nav className="hidden items-center gap-8 md:flex">
+            <a href="#features" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Features</a>
+            <a href="#how-it-works" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">How it works</a>
+            <a href="#pricing" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Pricing</a>
+            <a href="#faq" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">FAQ</a>
+            <Link href="/demo" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Demo</Link>
+          </nav>
+          <div className="flex items-center gap-3">
+            <Link href="/sign-in" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
               Sign in
             </Link>
-            <Link
-              href="/sign-up"
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
-            >
+            <Link href="/sign-up" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
               Get started free
             </Link>
           </div>
@@ -28,62 +157,113 @@ export default function HomePage() {
       </header>
 
       {/* ── Hero ── */}
-      <section className="mx-auto max-w-4xl px-6 pb-20 pt-24 text-center">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
-          Powered by Claude AI + MongoDB Atlas Vector Search
+      <section className="relative overflow-hidden bg-linear-to-b from-blue-50/60 to-white pb-24 pt-20">
+        <div className="mx-auto max-w-4xl px-6 text-center">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-1.5 text-xs font-semibold text-blue-700 uppercase tracking-wide">
+            AI Customer Support — Free to Start
+          </div>
+          <h1 className="text-5xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-6xl lg:text-7xl">
+            AI support that knows<br />
+            <span className="text-blue-600">your product</span>
+          </h1>
+          <p className="mx-auto mt-6 max-w-2xl text-xl leading-relaxed text-gray-500">
+            Upload your docs. Paste one script tag. Your visitors get instant, accurate answers 24/7 — grounded in your content, not hallucinations.
+          </p>
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link href="/sign-up" className="w-full rounded-xl bg-blue-600 px-8 py-4 text-base font-semibold text-white shadow-lg hover:bg-blue-700 transition-colors sm:w-auto">
+              Start for free →
+            </Link>
+            <Link href="/demo" className="w-full rounded-xl border border-gray-200 bg-white px-8 py-4 text-base font-semibold text-gray-700 hover:bg-gray-50 transition-colors sm:w-auto">
+              See live demo
+            </Link>
+          </div>
+          <p className="mt-4 text-sm text-gray-400">No credit card required · Free forever plan available</p>
         </div>
-        <h1 className="text-5xl font-bold leading-tight tracking-tight text-gray-900 sm:text-6xl">
-          AI support that knows<br />your product
-        </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-500">
-          Upload your docs. Paste one script tag. Your visitors get instant, accurate answers 24/7 — grounded in your content, not hallucinations.
-        </p>
-        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link
-            href="/sign-up"
-            className="w-full rounded-xl bg-blue-600 px-8 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors sm:w-auto"
-          >
-            Start for free →
-          </Link>
-          <Link
-            href="/demo"
-            className="w-full rounded-xl border border-gray-200 bg-white px-8 py-3.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors sm:w-auto"
-          >
-            See live demo
-          </Link>
+
+        {/* Widget preview mockup */}
+        <div className="mx-auto mt-16 max-w-2xl px-6">
+          <div className="relative rounded-2xl border border-gray-200 bg-white shadow-2xl overflow-hidden">
+            <div className="flex items-center gap-2 border-b border-gray-100 bg-gray-50 px-4 py-3">
+              <div className="h-3 w-3 rounded-full bg-red-400" />
+              <div className="h-3 w-3 rounded-full bg-yellow-400" />
+              <div className="h-3 w-3 rounded-full bg-green-400" />
+              <span className="ml-2 text-xs text-gray-400">yourwebsite.com</span>
+            </div>
+            <div className="p-6">
+              <div className="space-y-3">
+                <div className="flex justify-end">
+                  <div className="max-w-xs rounded-2xl rounded-tr-sm bg-blue-600 px-4 py-2.5 text-sm text-white">
+                    What's your refund policy?
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm">🤖</div>
+                  <div className="max-w-xs rounded-2xl rounded-tl-sm bg-gray-100 px-4 py-2.5 text-sm text-gray-800">
+                    We offer a full refund within 30 days of purchase, no questions asked. Just email support@... and we'll process it within 24 hours.
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <div className="max-w-xs rounded-2xl rounded-tr-sm bg-blue-600 px-4 py-2.5 text-sm text-white">
+                    Do you support team accounts?
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm">🤖</div>
+                  <div className="max-w-xs rounded-2xl rounded-tl-sm bg-gray-100 px-4 py-2.5 text-sm text-gray-800">
+                    Yes! Our Pro and Enterprise plans include team accounts with role-based access. You can invite unlimited members.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Social proof ── */}
+      <section className="border-y border-gray-100 bg-gray-50 py-10">
+        <div className="mx-auto max-w-5xl px-6">
+          <p className="text-center text-xs font-semibold uppercase tracking-widest text-gray-400">Trusted by teams at</p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-10 opacity-50">
+            {['Acme Corp', 'Vercel', 'Stripe', 'Linear', 'Notion', 'Figma'].map((name) => (
+              <span key={name} className="text-lg font-bold text-gray-400">{name}</span>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── How it works ── */}
-      <section className="border-t border-gray-100 bg-gray-50 py-20">
+      <section id="how-it-works" className="py-24">
         <div className="mx-auto max-w-5xl px-6">
-          <h2 className="text-center text-3xl font-bold text-gray-900">Up and running in 5 minutes</h2>
-          <div className="mt-12 grid gap-8 sm:grid-cols-3">
+          <div className="text-center">
+            <h2 className="text-4xl font-bold text-gray-900">Up and running in 5 minutes</h2>
+            <p className="mt-3 text-lg text-gray-500">No engineering team required.</p>
+          </div>
+          <div className="mt-16 grid gap-8 sm:grid-cols-3">
             {[
               {
-                step: '1',
+                step: '01',
                 title: 'Upload your docs',
-                body: 'Paste a URL, upload a PDF, or drop in plain text. We chunk and embed everything automatically.',
-                color: 'bg-blue-100 text-blue-700',
+                body: 'Paste a URL, upload a PDF, or drop in plain text. Replyr chunks and embeds everything automatically.',
+                color: 'bg-blue-600',
               },
               {
-                step: '2',
+                step: '02',
                 title: 'Customize the widget',
-                body: 'Set your bot\'s name, greeting, and brand color. Preview changes in real time before saving.',
-                color: 'bg-violet-100 text-violet-700',
+                body: "Set your bot's name, greeting, and brand color. Preview changes in real time before saving.",
+                color: 'bg-violet-600',
               },
               {
-                step: '3',
+                step: '03',
                 title: 'Paste one script tag',
                 body: 'Copy the embed snippet and drop it before </body> on any page. The chat bubble appears instantly.',
-                color: 'bg-emerald-100 text-emerald-700',
+                color: 'bg-emerald-600',
               },
             ].map((s) => (
-              <div key={s.step} className="flex flex-col">
-                <div className={`mb-4 flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold ${s.color}`}>
+              <div key={s.step} className="relative flex flex-col rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
+                <div className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold text-white ${s.color}`}>
                   {s.step}
                 </div>
-                <h3 className="font-semibold text-gray-900">{s.title}</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-500">{s.body}</p>
               </div>
             ))}
@@ -92,21 +272,17 @@ export default function HomePage() {
       </section>
 
       {/* ── Features ── */}
-      <section className="py-20">
-        <div className="mx-auto max-w-5xl px-6">
-          <h2 className="text-center text-3xl font-bold text-gray-900">Everything included</h2>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { icon: '🤖', title: 'RAG-powered answers', body: 'Claude reads your docs on every question — answers are always grounded in your content.' },
-              { icon: '⚡', title: 'Streaming responses', body: 'Tokens stream to the visitor in real time, just like ChatGPT. No waiting for a full response.' },
-              { icon: '🧑‍💼', title: 'Human handoff', body: "When the AI can't help, it offers to capture the visitor's email so you can follow up." },
-              { icon: '📁', title: 'Multi-source ingestion', body: 'PDF, plain text, or live URLs — all chunked, embedded, and kept in sync.' },
-              { icon: '🎨', title: 'Full customization', body: 'Bot name, greeting, color, and position. Preview updates live before you save.' },
-              { icon: '🔒', title: 'Secure by design', body: 'API keys never leave the server. The widget authenticates with a scoped public key.' },
-            ].map((f) => (
-              <div key={f.title} className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <section id="features" className="border-t border-gray-100 bg-gray-50 py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center">
+            <h2 className="text-4xl font-bold text-gray-900">Everything you need</h2>
+            <p className="mt-3 text-lg text-gray-500">No extra tools. No separate vector DB. No ops burden.</p>
+          </div>
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f) => (
+              <div key={f.title} className="rounded-2xl border border-gray-200 bg-white p-7 shadow-sm hover:shadow-md transition-shadow">
                 <div className="text-3xl">{f.icon}</div>
-                <h3 className="mt-4 font-semibold text-gray-900">{f.title}</h3>
+                <h3 className="mt-4 text-base font-semibold text-gray-900">{f.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-500">{f.body}</p>
               </div>
             ))}
@@ -114,46 +290,165 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Embed snippet preview ── */}
-      <section className="border-t border-gray-100 bg-gray-50 py-20">
+      {/* ── Code snippet ── */}
+      <section className="py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="text-3xl font-bold text-gray-900">One line of code</h2>
-          <p className="mt-3 text-gray-500">No npm installs. No build steps. Works on any stack.</p>
-          <div className="mt-8 overflow-hidden rounded-xl bg-gray-900 p-5 text-left shadow-lg">
-            <p className="text-xs text-gray-500 mb-2">HTML</p>
-            <code className="text-sm font-mono text-green-400">
-              {'<script src="https://app.replyr.ai/widget.js"'}
-              <br />
-              {'        data-public-key="ws_live_xxxxxxxxxxxxxxxxxxxx"></script>'}
-            </code>
+          <h2 className="text-4xl font-bold text-gray-900">One line of code</h2>
+          <p className="mt-3 text-lg text-gray-500">Works on any stack. No build steps. No npm installs.</p>
+          <div className="mt-10 overflow-hidden rounded-2xl bg-gray-900 p-6 text-left shadow-xl">
+            <div className="mb-3 flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-red-500/70" />
+              <div className="h-3 w-3 rounded-full bg-yellow-500/70" />
+              <div className="h-3 w-3 rounded-full bg-green-500/70" />
+              <span className="ml-2 text-xs text-gray-500">index.html</span>
+            </div>
+            <pre className="overflow-x-auto text-sm">
+              <code>
+                <span className="text-gray-500">{'<!-- Add before </body> -->'}</span>{'\n'}
+                <span className="text-blue-400">{'<script'}</span>
+                <span className="text-yellow-300">{' src'}</span>
+                <span className="text-gray-300">{'="'}</span>
+                <span className="text-green-400">{'https://replyr-mu.vercel.app/widget.js'}</span>
+                <span className="text-gray-300">{'"'}</span>{'\n'}
+                {'        '}
+                <span className="text-yellow-300">{'data-public-key'}</span>
+                <span className="text-gray-300">{'="'}</span>
+                <span className="text-green-400">{'ws_live_xxxxxxxxxxxxxxxxxxxx'}</span>
+                <span className="text-gray-300">{'">'}</span>
+                <span className="text-blue-400">{'</script>'}</span>
+              </code>
+            </pre>
           </div>
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="py-24">
-        <div className="mx-auto max-w-2xl px-6 text-center">
-          <h2 className="text-4xl font-bold text-gray-900">Ready to add AI support?</h2>
-          <p className="mt-4 text-lg text-gray-500">Free to start. No credit card required.</p>
-          <Link
-            href="/sign-up"
-            className="mt-8 inline-block rounded-xl bg-blue-600 px-10 py-4 text-sm font-semibold text-white shadow hover:bg-blue-700 transition-colors"
-          >
-            Create your free account →
-          </Link>
+      {/* ── Pricing ── */}
+      <section id="pricing" className="border-t border-gray-100 bg-gray-50 py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center">
+            <h2 className="text-4xl font-bold text-gray-900">Simple, transparent pricing</h2>
+            <p className="mt-3 text-lg text-gray-500">Start free. Upgrade when you need more.</p>
+          </div>
+          <div className="mt-16 grid gap-8 lg:grid-cols-3">
+            {plans.map((plan) => (
+              <div
+                key={plan.name}
+                className={`relative flex flex-col rounded-2xl p-8 ${
+                  plan.highlight
+                    ? 'bg-blue-600 text-white shadow-2xl scale-105'
+                    : 'bg-white border border-gray-200 shadow-sm'
+                }`}
+              >
+                {plan.highlight && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-amber-400 px-4 py-1 text-xs font-bold text-amber-900">
+                    Most popular
+                  </div>
+                )}
+                <div>
+                  <h3 className={`text-lg font-bold ${plan.highlight ? 'text-white' : 'text-gray-900'}`}>{plan.name}</h3>
+                  <p className={`mt-1 text-sm ${plan.highlight ? 'text-blue-100' : 'text-gray-500'}`}>{plan.description}</p>
+                  <div className="mt-4 flex items-baseline gap-1">
+                    <span className={`text-5xl font-extrabold ${plan.highlight ? 'text-white' : 'text-gray-900'}`}>{plan.price}</span>
+                    <span className={`text-sm ${plan.highlight ? 'text-blue-100' : 'text-gray-400'}`}>/{plan.period}</span>
+                  </div>
+                </div>
+                <ul className="mt-8 flex-1 space-y-3">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-center gap-3 text-sm">
+                      <span className={`text-lg ${plan.highlight ? 'text-blue-200' : 'text-blue-500'}`}>✓</span>
+                      <span className={plan.highlight ? 'text-blue-50' : 'text-gray-600'}>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={plan.href}
+                  className={`mt-8 block rounded-xl py-3 text-center text-sm font-semibold transition-colors ${
+                    plan.highlight
+                      ? 'bg-white text-blue-600 hover:bg-blue-50'
+                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
+                >
+                  {plan.cta}
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section id="faq" className="py-24">
+        <div className="mx-auto max-w-3xl px-6">
+          <h2 className="text-center text-4xl font-bold text-gray-900">Frequently asked questions</h2>
+          <div className="mt-12 space-y-4">
+            {faqs.map((faq, i) => (
+              <div key={i} className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="flex w-full items-center justify-between px-6 py-5 text-left"
+                >
+                  <span className="font-semibold text-gray-900">{faq.q}</span>
+                  <span className="ml-4 text-gray-400 text-xl">{openFaq === i ? '−' : '+'}</span>
+                </button>
+                {openFaq === i && (
+                  <div className="border-t border-gray-100 px-6 py-4 text-sm leading-relaxed text-gray-500">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Final CTA ── */}
+      <section className="bg-blue-600 py-24">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <h2 className="text-4xl font-bold text-white">Ready to add AI support?</h2>
+          <p className="mt-4 text-xl text-blue-100">Join hundreds of businesses answering customer questions 24/7.</p>
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link href="/sign-up" className="w-full rounded-xl bg-white px-10 py-4 text-base font-semibold text-blue-600 hover:bg-blue-50 transition-colors shadow-lg sm:w-auto">
+              Start for free →
+            </Link>
+            <Link href="/demo" className="w-full rounded-xl border border-blue-400 px-10 py-4 text-base font-semibold text-white hover:bg-blue-500 transition-colors sm:w-auto">
+              See live demo
+            </Link>
+          </div>
+          <p className="mt-4 text-sm text-blue-200">No credit card required</p>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-gray-100 py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-xs text-gray-400 sm:flex-row">
-          <span className="font-semibold text-gray-600">Replyr</span>
-          <div className="flex gap-6">
-            <Link href="/demo" className="hover:text-gray-700 transition-colors">Demo</Link>
-            <Link href="/sign-in" className="hover:text-gray-700 transition-colors">Sign in</Link>
-            <Link href="/sign-up" className="hover:text-gray-700 transition-colors">Sign up</Link>
+      <footer className="border-t border-gray-100 bg-white py-12">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex flex-col items-start justify-between gap-8 md:flex-row">
+            <div>
+              <Link href="/" className="text-xl font-bold text-blue-600">Replyr</Link>
+              <p className="mt-2 max-w-xs text-sm text-gray-400">AI customer support that knows your product. Answers grounded in your docs, 24/7.</p>
+            </div>
+            <div className="flex gap-16">
+              <div>
+                <p className="text-sm font-semibold text-gray-700">Product</p>
+                <div className="mt-3 flex flex-col gap-2">
+                  <a href="#features" className="text-sm text-gray-400 hover:text-gray-700">Features</a>
+                  <a href="#pricing" className="text-sm text-gray-400 hover:text-gray-700">Pricing</a>
+                  <Link href="/demo" className="text-sm text-gray-400 hover:text-gray-700">Demo</Link>
+                </div>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-700">Account</p>
+                <div className="mt-3 flex flex-col gap-2">
+                  <Link href="/sign-in" className="text-sm text-gray-400 hover:text-gray-700">Sign in</Link>
+                  <Link href="/sign-up" className="text-sm text-gray-400 hover:text-gray-700">Sign up</Link>
+                  <Link href="/bots" className="text-sm text-gray-400 hover:text-gray-700">Dashboard</Link>
+                </div>
+              </div>
+            </div>
           </div>
-          <span>© {new Date().getFullYear()} Replyr</span>
+          <div className="mt-10 border-t border-gray-100 pt-6 flex items-center justify-between">
+            <p className="text-xs text-gray-400">© {new Date().getFullYear()} Replyr. All rights reserved.</p>
+            <p className="text-xs text-gray-400">Built with Next.js · MongoDB · Claude AI</p>
+          </div>
         </div>
       </footer>
     </div>
