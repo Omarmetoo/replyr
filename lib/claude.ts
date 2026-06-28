@@ -1,17 +1,17 @@
-import Anthropic from '@anthropic-ai/sdk'
+import Groq from 'groq-sdk'
 
-let client: Anthropic | null = null
+let client: Groq | null = null
 
-function getClient(): Anthropic {
+function getClient(): Groq {
   if (!client) {
-    const apiKey = process.env.ANTHROPIC_API_KEY
-    if (!apiKey) throw new Error('ANTHROPIC_API_KEY is not set')
-    client = new Anthropic({ apiKey })
+    const apiKey = process.env.GROQ_API_KEY
+    if (!apiKey) throw new Error('GROQ_API_KEY is not set')
+    client = new Groq({ apiKey })
   }
   return client
 }
 
-const MODEL = 'claude-haiku-4-5'
+const MODEL = 'llama-3.3-70b-versatile'
 
 export function streamAnswer(
   systemPrompt: string,
@@ -21,19 +21,18 @@ export function streamAnswer(
   return new ReadableStream({
     async start(controller) {
       try {
-        const stream = getClient().messages.stream({
+        const stream = await getClient().chat.completions.create({
           model: MODEL,
           max_tokens: 1024,
-          system: systemPrompt,
-          messages,
+          stream: true,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            ...messages,
+          ],
         })
-        for await (const event of stream) {
-          if (
-            event.type === 'content_block_delta' &&
-            event.delta.type === 'text_delta'
-          ) {
-            controller.enqueue(encoder.encode(event.delta.text))
-          }
+        for await (const chunk of stream) {
+          const text = chunk.choices[0]?.delta?.content ?? ''
+          if (text) controller.enqueue(encoder.encode(text))
         }
         controller.close()
       } catch (err) {
