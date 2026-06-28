@@ -1,9 +1,10 @@
-import { UserButton } from '@clerk/nextjs'
+import { ClerkProvider, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
 import { BotIcon, SettingsIcon } from 'lucide-react'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
+    <ClerkProvider>
     <div className="flex h-screen overflow-hidden bg-gray-50">
       {/* Sidebar */}
       <aside className="flex w-56 flex-col border-r border-gray-200 bg-white">
@@ -38,5 +39,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main content */}
       <main className="flex-1 overflow-y-auto p-8">{children}</main>
     </div>
+    </ClerkProvider>
   )
 }
